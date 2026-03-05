@@ -1,1 +1,0 @@
-# BioVote-AI-Powered-OTP-Based-Digital-Voting-System

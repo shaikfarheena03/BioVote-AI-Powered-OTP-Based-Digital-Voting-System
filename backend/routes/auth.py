@@ -165,7 +165,7 @@ def face_verify():
         print(f"[DEBUG] Face Distance for {voter_id}: {distance}")
 
         # ---------------- SECURITY THRESHOLD ----------------
-        THRESHOLD = 0.45   # adjust if needed
+        THRESHOLD = 0.45  
 
         if distance < THRESHOLD:
             face_verified_voters[voter_id] = True
@@ -205,7 +205,7 @@ def liveness_check():
         return jsonify({"error": "Missing voter_id or frames"}), 400
 
     EYE_AR_THRESH = 0.20
-    REQUIRED_BLINKS = 1   # keep 1 for testing
+    REQUIRED_BLINKS = 1 
 
     blink_count = 0
     eye_closed = False
@@ -225,7 +225,7 @@ def liveness_check():
             if len(rects) == 0:
                 continue
 
-            rect = rects[0]   # only first face
+            rect = rects[0]   
 
             shape = predictor(gray, rect)
             shape = face_utils.shape_to_np(shape)

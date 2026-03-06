@@ -17,7 +17,7 @@ def cast_vote():
     db = get_db()
     cur = db.cursor(dictionary=True)
 
-    # 1️⃣ Check voter exists and is active
+    #  Check voter exists and is active
     cur.execute(
         "SELECT * FROM voters WHERE voter_id=%s AND is_active=TRUE",
         (voter_id,)
@@ -28,19 +28,19 @@ def cast_vote():
         db.close()
         return jsonify({"error": "Invalid or inactive voter"}), 400
 
-    #2️⃣  Check Face verification
+    # Check Face verification
     if voter_id not in face_verified_voters:
         db.close()
         return jsonify({"error": "Face verification required"}), 403
     
-    #3️⃣ Check OTP verification
+    # Check OTP verification
     if voter_id not in verified_voters:
         db.close()
         return jsonify({"error": "OTP verification required"}), 403
 
 
 
-    # 4️⃣ Check active election
+    #  Check active election
     cur.execute(
         "SELECT * FROM elections WHERE is_active=TRUE"
     )
@@ -52,7 +52,7 @@ def cast_vote():
 
     election_id = election["election_id"]
 
-    # 5️⃣ Validate candidate belongs to active election
+    #  Validate candidate belongs to active election
     cur.execute(
         "SELECT * FROM candidates WHERE candidate_id=%s AND election_id=%s",
         (candidate_id, election_id)
@@ -63,7 +63,7 @@ def cast_vote():
         db.close()
         return jsonify({"error": "Invalid candidate for this election"}), 400
 
-    # 6️⃣ Check voter has not already voted
+    #  Check voter has not already voted
     cur.execute(
         "SELECT * FROM vote_status WHERE voter_id=%s AND election_id=%s",
         (voter_id, election_id)
@@ -74,13 +74,13 @@ def cast_vote():
         db.close()
         return jsonify({"error": "You have already voted"}), 400
 
-    # 7️⃣ Insert vote anonymously
+    #  Insert vote anonymously
     cur.execute(
         "INSERT INTO votes (election_id, candidate_id) VALUES (%s, %s)",
         (election_id, candidate_id)
     )
 
-    # 8️⃣ Update vote_status
+    # Update vote_status
     if status:
         cur.execute(
             "UPDATE vote_status SET has_voted=TRUE WHERE voter_id=%s AND election_id=%s",
@@ -95,7 +95,7 @@ def cast_vote():
     db.commit()
     db.close()
 
-    # 🔐 Clear verification after vote
+    # Clear verification after vote
     if voter_id in verified_voters:
         del verified_voters[voter_id]
 

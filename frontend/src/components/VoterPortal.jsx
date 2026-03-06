@@ -61,10 +61,6 @@ function VoterPortal() {
     }
   }, [step]);
 
-  /* ================================
-        STEP 2 – CAPTURE & VERIFY FACE
-  ================================= */
-
 const captureAndVerify = async () => {
   if (!videoRef.current) return;
 
@@ -216,7 +212,7 @@ const verifyOtp = async () => {
       setError("");
 
       setTimeout(() => {
-        setStep(4); // Move to voting screen
+        setStep(4);
       }, 1200);
 
     } else {
